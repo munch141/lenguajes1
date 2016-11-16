@@ -2,7 +2,11 @@
 
 class Array
     def foldr e, b
-        head, *tail = *self
-        
+        if self == [] then
+            e
+        else
+            head, *tail = *self
+            b.call(head, tail.foldr(e,b))
+        end
     end
 end
