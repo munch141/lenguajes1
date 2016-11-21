@@ -5,16 +5,37 @@ module Foldable
        self.foldr(true) {|_,_| false}
     end
 
-    def foldr1 &b
+    def foldr1 &block
         if self.null? then
             raise "empty structure"
         else
-            # falta esto
+            # esto es mientras tanto para poder probar los otros métodos
+            if self.class == Rose then
+                self.foldr(self.elem, &block)
+            else
+                self.foldr(self.head, &block)
+            end
         end
     end
 
     def length
         self.foldr(0) {|_,l| l+1}
+    end
+
+    def all &block
+        self.foldr(true) {|x,r| block.call(x) and r}
+    end
+
+    def any &block
+        self.foldr(false) {|x,r| block.call(x) or r}
+    end
+
+    def to_arr
+        # falta
+    end
+
+    def elem_to_find
+        # falta
     end
 end
 
@@ -49,5 +70,9 @@ class Rose
         r = e
         @children.reverse_each {|child| r = child.foldr(r, &b)}
         b.call(@elem, r)
+    end
+
+    def avg
+
     end
 end
