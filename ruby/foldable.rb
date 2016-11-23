@@ -37,8 +37,8 @@ module Foldable
         self.foldr([]) {|x,arr| [x].push *arr}
     end
 
-    def elem_to_find
-        # falta
+    def elem? to_find
+        self.any? {|x| x == to_find}
     end
 end
 
