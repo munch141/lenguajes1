@@ -10,10 +10,13 @@ module Foldable
             raise "empty structure"
         else
             # esto es mientras tanto para poder probar los otros métodos
-            if self.class == Rose then
-                self.foldr(self.elem, &block)
-            else
-                self.foldr(self.head, &block)
+            if self.is_a? Rose then
+                r = self.elem
+                self.children.reverse_each {|child| r = child.foldr(r, &block)}
+                r
+            elsif self.is_a? Array then
+                head, *tail = self
+                tail.foldr(head, &block)
             end
         end
     end
@@ -22,11 +25,11 @@ module Foldable
         self.foldr(0) {|_,l| l+1}
     end
 
-    def all &block
+    def all? &block
         self.foldr(true) {|x,r| block.call(x) and r}
     end
 
-    def any &block
+    def any? &block
         self.foldr(false) {|x,r| block.call(x) or r}
     end
 
@@ -47,7 +50,7 @@ class Array
             e
         else
             head, *tail = self
-            yield(head, tail.foldr(e, &b))
+            b.call(head, tail.foldr(e, &b))
         end
     end
 end
@@ -73,6 +76,10 @@ class Rose
     end
 
     def avg
-
+        i = 1
+        self.foldr1 do |x,avg|
+            i += 1
+            (avg.to_f*(i-1)+x)/i
+        end
     end
 end
