@@ -34,7 +34,7 @@ module Foldable
     end
 
     def to_arr
-        # falta
+        self.foldr([]) {|x,arr| [x].push *arr}
     end
 
     def elem_to_find
