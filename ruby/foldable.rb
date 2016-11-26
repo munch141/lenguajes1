@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+# FALTA DOCUMENTAR!!!
+
 module Foldable
     def null?
        self.foldr(true) {|_,_| false}
