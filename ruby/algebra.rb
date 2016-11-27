@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 def infimo(i1, i2)
     if i1.lower_value == i2.lower_value then
         [i1.lower_value, (i1.lower_inclusive? and i2.lower_inclusive?)]
@@ -407,25 +409,14 @@ end
 
 
 class Array
-    def foldr e, &b
-        if self == [] then
-            e
-        else
-            head, *tail = self
-            b.call(head, tail.foldr(e, &b))
-        end
-    end
-
-    def each_ineq_op
+    def each_ineq_op &b
         aux = self
         begin
-            yield (aux[1,3], aux[3], aux[5,7])
-            aux = aux.drop(7)
+            b.call(aux[1,3], aux[3])
+            aux = aux.drop(4)
         end while not aux.empty?
     end
 end
-
-# MAIN
 
 def get_interval ineq
     case ineq[0]
@@ -442,19 +433,58 @@ def get_interval ineq
         end
 end
 
-def parse_line line
-    l = line.split
-    var = l[0]
-    i1 = AllReals.instance
-    i2 = AllReals.instance
-    pila = []
+def parse_line l
+    pila_or = []
+    pila_and = []
+    interval = nil
     
-    l.each_ineq_op do |ineq1,op,ineq2|
-        i1 = get_interval(ineq1)
+    l.each_ineq_op do |ineq,op|
+        interval = get_interval(ineq)
         
-        if op != nil then
-            i2 = get_interval(ineq2)
-
-
+        if op == "&" then
+            pila_and.push(interval)
+        elsif op == "|" then
+            if not pila_and.empty? then
+                pila_and.push(interval)
+                interval = AllReals.instance
+                pila_and.each {|x| interval = interval.intersection(x)}
+                pila_and = []
+            end
+            pila_or.push(interval)
+        end
     end
+
+    if not pila_and.empty? then
+        pila_and.push(interval)
+        acc = AllReals.instance
+        pila_and.each {|x| acc = acc.intersection(x)}
+        acc
+    elsif not pila_or.empty? then
+        pila_or.push(interval)
+        acc = Empty.instance
+        pila_or.each {|x| acc = acc.union(x)}
+        acc
+    else
+        interval
+    end
+end
+
+# MAIN!
+
+variables = Hash.new
+text = File.open(ARGV[0]).read
+text.each_line do |line|
+    l = line.split
+    i = parse_line l
+    if variables.has_key? l[0] then
+        variables[l[0]] = variables[l[0]].union(i)
+    else
+        variables[l[0]] = i
+    end
+end
+
+variables.each_with_index {|x| puts x[0].to_s + " in " + x[1].to_s}
+
+while line != "exit"
+    
 end
