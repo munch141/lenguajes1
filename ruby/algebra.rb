@@ -404,3 +404,57 @@ class Empty < Interval
 
     private_class_method :new
 end
+
+
+class Array
+    def foldr e, &b
+        if self == [] then
+            e
+        else
+            head, *tail = self
+            b.call(head, tail.foldr(e, &b))
+        end
+    end
+
+    def each_ineq_op
+        aux = self
+        begin
+            yield (aux[1,3], aux[3], aux[5,7])
+            aux = aux.drop(7)
+        end while not aux.empty?
+    end
+end
+
+# MAIN
+
+def get_interval ineq
+    case ineq[0]
+        when "<"
+            LeftInfinite.new(ineq[1].to_f, false)
+        when "<="
+            LeftInfinite.new(ineq[1].to_f, true)
+        when ">"
+            RightInfinite.new(false, ineq[1].to_f)
+        when ">="
+            RightInfinite.new(true, ineq[1].to_f)
+        else
+            raise "comparador inválido: " + ineq[0]
+        end
+end
+
+def parse_line line
+    l = line.split
+    var = l[0]
+    i1 = AllReals.instance
+    i2 = AllReals.instance
+    pila = []
+    
+    l.each_ineq_op do |ineq1,op,ineq2|
+        i1 = get_interval(ineq1)
+        
+        if op != nil then
+            i2 = get_interval(ineq2)
+
+
+    end
+end
