@@ -1,5 +1,12 @@
 #!/usr/bin/ruby
 
+# Descripción : Programa calcular intervalos de números flotantes.
+# Materia     : Taller de Lenguajes de Programación I (CI-3661)
+# Grupo       : 25
+# Entrega     : Tarea Ruby
+
+# FALTA DOCUMENTAR!!
+
 def infimo(i1, i2)
     if i1.lower_value == i2.lower_value then
         [i1.lower_value, (i1.lower_inclusive? and i2.lower_inclusive?)]
@@ -338,19 +345,19 @@ class AllReals < Interval
     end
 
     def union other
-        self.instance
+        AllReals.instance
     end
 
     def union_literal other
-        self.instance
+        AllReals.instance
     end
 
     def union_right_infinite other
-        self.instance
+        AllReals.instance
     end
 
     def union_left_infinite other
-        self.instance
+        AllReals.instance
     end
 
     private_class_method :new
@@ -373,19 +380,19 @@ class Empty < Interval
     end
 
     def intersection other
-        self.instance
+        Empty.instance
     end
 
     def intersection_literal other
-        self.instance
+        Empty.instance
     end
 
     def intersection_right_infinite other
-        self.instance
+        Empty.instance
     end
 
     def intersection_left_infinite other
-        self.instance
+        Empty.instance
     end
 
     def union other
@@ -472,7 +479,8 @@ end
 # MAIN!
 
 variables = Hash.new
-text = File.open(ARGV[0]).read
+f = File.open(ARGV[0])
+text = f.read
 text.each_line do |line|
     l = line.split
     i = parse_line l
@@ -482,9 +490,22 @@ text.each_line do |line|
         variables[l[0]] = i
     end
 end
+f.close
 
 variables.each_with_index {|x| puts x[0].to_s + " in " + x[1].to_s}
+puts ""
 
-while line != "exit"
-    
+loop do
+    print "Operación: "
+    line = STDIN.gets.chomp
+    exit if line == "exit"
+    l = line.split
+    case l[1]
+        when "&"
+            i = variables[l[0]].intersection(variables[l[2]])
+        when "|"
+            i = variables[l[0]].union(variables[l[2]])
+    end
+    puts "Resultado: " + i.to_s
+    puts ""
 end

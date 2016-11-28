@@ -1,5 +1,10 @@
 #!/usr/bin/ruby
 
+# Descripción : Implementación del comportamiento fold en arreglos y árboles.
+# Materia     : Taller de Lenguajes de Programación I (CI-3661)
+# Grupo       : 25
+# Entrega     : Tarea Ruby
+
 # FALTA DOCUMENTAR!!!
 
 module Foldable
@@ -11,7 +16,6 @@ module Foldable
         if self.null? then
             raise "empty structure"
         else
-            # esto es mientras tanto para poder probar los otros métodos
             if self.is_a? Rose then
                 r = self.elem
                 self.children.reverse_each {|child| r = child.foldr(r, &block)}
