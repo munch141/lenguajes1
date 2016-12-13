@@ -155,7 +155,7 @@ caballito(N,L) :-
 % Este predicado triunfa si la lista L no tiene posciones inválidas, esto es,
 % si para todo par k(i,j) en L se cumple que 1 <= i <= n y 1 <= j <= n.
 
-pos_validas(N,[]) :- !.
+pos_validas(_,[]) :- !.
 pos_validas(N,[k(X,Y)|Otras]) :-
     1 =< X, X =< N,
     1 =< Y, Y =< N,
