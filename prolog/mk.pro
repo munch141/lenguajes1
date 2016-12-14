@@ -9,6 +9,13 @@
  * Materia:     Taller de Lenguajes de Programación I (CI-3661)
  * Grupo  :     25
  * Entrega:     Tarea Prolog
+ *
+ *
+ * NOTA: es sumamente lento...a partir del tablero de tamaño 6 se tarda varios
+ *       minutos en encontrar una solución. Para un tablero de tamaño NxN tiene
+ *       que probar todas las combinaciones menores a NxN caballos, se repiten
+ *       demasiados cómputos. Por lo menos todas las combinaciones de caballos
+ *       que prueba son únicas.
  */
 
 
