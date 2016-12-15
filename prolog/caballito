@@ -1,0 +1,43 @@
+coordenadas(N,P,X,Y) :-
+    P1 is P-1,
+    X is P1 // N+1,
+    Y is P1 mod N+1.
+
+caballito(N,L) :-
+    0 =< N,
+    pos_validas(N,L),
+    sort(L,L1),
+    draw(N,0,L1).
+
+pos_validas(_,[]) :- !.
+pos_validas(N,[k(X,Y)|Resto]) :-
+    1 =< X, X =< N,
+    1 =< Y, Y =< N,
+    pos_validas(N,Resto).
+
+draw(N,P,_) :- P =:= N*N+1,!.
+draw(N,0,L) :- horiz(N),draw(N,1,L),!.
+draw(N,P,[k(X,N)|Resto]) :-
+    coordenadas(N,P,X,N),
+    write('|K|'),nl,
+    horiz(N),
+    P1 is P+1,
+    draw(N,P1,Resto),!.
+draw(N,P,Resto) :-
+    coordenadas(N,P,_,N),
+    write('| |'),nl,
+    horiz(N),
+    P1 is P+1,
+    draw(N,P1,Resto),!.
+draw(N,P,[k(X,Y)|Resto]) :-
+    coordenadas(N,P,X,Y),
+    write('|K'),
+    P1 is P+1,
+    draw(N,P1,Resto),!.
+draw(N,P,Resto) :-
+    write('| '),
+    P1 is P+1,
+    draw(N,P1,Resto),!.
+
+horiz(0) :- write('+'), nl.
+horiz(N) :- N > 0, write('+-'), N1 is N-1, horiz(N1).
