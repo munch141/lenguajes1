@@ -7,7 +7,7 @@
  * Grupo  :     25
  * Entrega:     Tarea Prolog
  */
-
+ 
 %% spider(+Graph:atom, ?T:list)
 %
 %  -Graph: identificador del grafo a examinar.
@@ -33,15 +33,15 @@ spider(Graph,T) :-
 % 3 o más aristas. Si se consigue una araña, se sigue revisando el grafo pero
 % con spider_found.
 
-no_spider(G,[]) :- !.
-no_spider(G,[X|Vertices]) :-
-    children(X,G,C),
+no_spider(_,[]) :- !.
+no_spider(_G,[X|Vertices]) :-
+    children(X,_G,C),
     length(C,N), N >= 3,
-    spider_found(G,Vertices),!.
-no_spider(G,[X|Vertices]) :-
-    children(X,G,C),
+    spider_found(_G,Vertices),!.
+no_spider(_G,[X|Vertices]) :-
+    children(X,_G,C),
     length(C,N), N < 3,
-    no_spider(G,Vertices).
+    no_spider(_G,Vertices).
 
 %% spider_found(+G:list, +Vertices:list)
 %
@@ -51,11 +51,11 @@ no_spider(G,[X|Vertices]) :-
 % Este predicado se usa para revisar si hay otra arña en el grafo sabiendo que
 % ya hay una.
 
-spider_found(G,[]) :- !.
-spider_found(G,[X|Vertices]) :-
-    children(X,G,C),
+spider_found(_G,[]) :- !.
+spider_found(_G,[X|Vertices]) :-
+    children(X,_G,C),
     length(C,N), N < 3,
-    spider_found(G,Vertices).
+    spider_found(_G,Vertices).
 
 %% subtract(+L1:list, +L2:list, ?L3:list)
 %
